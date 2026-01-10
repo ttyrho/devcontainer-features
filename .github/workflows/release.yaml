@@ -1,29 +1,26 @@
-name: "Release dev container features & Generate Documentation"
+name: Release features
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
-  deploy:
-    if: ${{ github.ref == 'refs/heads/main' }}
+  generate-documentation:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-      packages: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
 
-      - name: "Publish Features"
+      - name: Update README
         uses: devcontainers/action@v1
         with:
-          publish-features: "true"
           base-path-to-features: "./src"
           generate-docs: "true"
-          
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Create PR for Documentation
+      - name: Commit changes
         id: push_image_info
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -31,17 +28,36 @@ jobs:
           set -e
           echo "Start."
           # Configure git and Push updates
-          git config --global user.email github-actions[bot]@users.noreply.github.com
-          git config --global user.name github-actions[bot]
+          git config --global --add safe.directory /github/workspace
+          git config --global user.email github-actions@github.com
+          git config --global user.name github-actions
           git config pull.rebase false
-          branch=automated-documentation-update-$GITHUB_RUN_ID
-          git checkout -b $branch
+          git fetch --depth=1 origin +refs/tags/*:refs/tags/* || true
           message='Automated documentation update'
           # Add / update and commit
           git add */**/README.md
+          if [ "$(git status --porcelain | grep "$file" | grep -c -E '([MA]\W).+')" -eq 1 ]; then
+            echo "::debug Added ${file} to git staging area"
+          else
+            echo "::debug No change in ${file} detected"
+          fi
+          echo "::debug Following files will be committed"
+          git status -s
           git commit -m 'Automated documentation update [skip ci]' || export NO_UPDATES=true
           # Push
           if [ "$NO_UPDATES" != "true" ] ; then
-              git push origin "$branch"
-              gh pr create --title "$message" --body "$message"
+              git push
           fi
+
+  generate-packages:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Publish Features
+        uses: devcontainers/action@v1
+        with:
+          publish-features: "true"
+          base-path-to-features: "./src"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
