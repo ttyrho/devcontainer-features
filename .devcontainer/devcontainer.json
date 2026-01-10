@@ -21,6 +21,6 @@
             ]
         }
     },
-    "remoteUser": "node",
+    "remoteUser": "root",
     "updateContentCommand": "npm install -g @devcontainers/cli"
 }
