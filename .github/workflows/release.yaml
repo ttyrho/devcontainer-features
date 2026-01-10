@@ -1,4 +1,4 @@
-name: "Release dev container features"
+name: "Release dev container features & Generate Documentation"
 on:
   workflow_dispatch:
 
@@ -6,13 +6,19 @@ jobs:
   deploy:
     if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      packages: write
     steps:
-      - uses: actions/checkout@v3
-
-      - name: "Install latest devcontainer CLI"
-        run: npm install -g @devcontainers/cli
+      - uses: actions/checkout@v4
 
       - name: "Publish Features"
-        run: devcontainer features publish -r ghcr.io -n ttyrho/devcontainer-features ./src
+        uses: devcontainers/action@v1
+        with:
+          publish-features: "true"
+          base-path-to-features: "./src"
+          generate-docs: "true"
+          
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
