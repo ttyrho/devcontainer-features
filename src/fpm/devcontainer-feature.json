@@ -1,0 +1,6 @@
+{
+    "id": "fpm",
+    "name": "Fortran Package Manager",
+    "version": "0.0.0",
+    "description": "Installs the Fortran Package Manager"
+}
