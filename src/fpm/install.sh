@@ -4,6 +4,36 @@
 set -e
 
 
+# Outputs a message using the given color.
+# Arguments:
+#   - The name of the color to use on message ouput
+#   - The message to be printed out
+msg() {
+    case "$1" in
+        red)
+            COLOR="\e[1;31m"
+        ;;
+        green)
+            COLOR="\e[1;32m"
+        ;;
+        yellow)
+            COLOR="\e[1;33m"
+        ;;
+        blue)
+            COLOR="\e[1;34m"
+        ;;
+        purple)
+            COLOR="\e[1;35m"
+        ;;
+        cyan)
+            COLOR="\e[1;36m"
+        ;;
+    esac
+
+    echo -e "${COLOR}$2\e[0m"
+}
+
+
 update_package_cache() {
     case "${ID}" in
         debian|ubuntu)
@@ -49,9 +79,9 @@ verify_binary_checksum() {
     ACTUAL_CHECKSUM=`openssl sha256 -r "$2" | cut -d' ' -f1`
 
     if [ ${EXPECTED_CHECKSUM} = ${ACTUAL_CHECKSUM} ]; then
-        echo "Binary checksum successfully verified"
+        msg yellow "[I] Binary checksum successfully verified"
     else
-        echo "Binary checksum mismatch. Expected: ${EXPECTED_CHECKSUM}. Actual: ${ACTUAL_CHECKSUM}."
+        msg red "[E] Binary checksum mismatch. Expected: ${EXPECTED_CHECKSUM}. Actual: ${ACTUAL_CHECKSUM}."
         exit 1
     fi
 }
@@ -68,12 +98,21 @@ install_binary() {
 }
 
 
+source /etc/os-release
+
+case "${ID}" in
+    debian|ubuntu)
+    ;;
+    *)
+        msg red "$[E] {ID}: Unsupported operating system"
+        exit 1
+    ;;
+esac
+    
 if [ "$(id --user)" -ne 0 ]; then
-  echo -e 'Script must be run as root. Use sudo, su, or add "USER root" to your Dockerfile before running this script.'
+  msg red "[E] Script must be run as root. Actual UID: $(id --user)"
   exit 1
 fi
-
-source /etc/os-release
 
 update_package_cache
 install_packages curl ca-certificates openssl
@@ -88,4 +127,4 @@ download_binary ${BINARY_URL} /tmp/${BINARY_FILENAME}
 verify_binary_checksum ${CHECKSUM_URL} /tmp/${BINARY_FILENAME}
 install_binary /tmp/${BINARY_FILENAME} /usr/local/bin
 
-echo "Fortran Package Manager successfully instaled"
+msg green "Fortran Package Manager successfully instaled"

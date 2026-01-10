@@ -1,6 +1,7 @@
 {
     "id": "fpm",
     "name": "Fortran Package Manager",
-    "version": "0.0.0",
-    "description": "Installs the Fortran Package Manager"
+    "version": "1.0.0",
+    "description": "Installs the Fortran Package Manager",
+    "documentationURL": "https://github.com/ttyrho/devcontainer-features/tree/main/src/fpm"
 }
