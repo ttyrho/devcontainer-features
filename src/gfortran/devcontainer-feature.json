@@ -1,0 +1,6 @@
+{
+    "id": "gfortran",
+    "name": "GNU Fortran",
+    "version": "1.0.0",
+    "description": "Installs GNU Fortran"
+}
