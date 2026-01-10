@@ -1,0 +1,38 @@
+name: Verify features
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  test-features:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    strategy:
+      matrix:
+        features:
+          - "fpm"
+          - "gfortran"
+        baseImage:
+          - "mcr.microsoft.com/devcontainers/base:ubuntu"
+          - "mcr.microsoft.com/devcontainers/base:trixie"
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: "Install latest devcontainer CLI"
+        run: npm install -g @devcontainers/cli
+
+      - name: "Execute test scenarios for '${{ matrix.features }}' against '${{ matrix.baseImage }}'"
+        run: devcontainer features test --features ${{ matrix.features }} --base-image ${{ matrix.baseImage }} .
+
+  test-global:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: "Install latest devcontainer CLI"
+        run: npm install -g @devcontainers/cli
+
+      - name: "Execute global test scenarios"
+        run: devcontainer features test --global-scenarios-only .
