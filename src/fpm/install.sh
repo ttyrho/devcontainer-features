@@ -4,39 +4,13 @@
 set -e
 
 
-# Outputs a message using the given color.
-# Arguments:
-#   - The name of the color to use on message ouput
-#   - The message to be printed out
-msg() {
-    case "$1" in
-        red)
-            COLOR="\e[1;31m"
-        ;;
-        green)
-            COLOR="\e[1;32m"
-        ;;
-        yellow)
-            COLOR="\e[1;33m"
-        ;;
-        blue)
-            COLOR="\e[1;34m"
-        ;;
-        purple)
-            COLOR="\e[1;35m"
-        ;;
-        cyan)
-            COLOR="\e[1;36m"
-        ;;
-    esac
-
-    echo -e "${COLOR}$2\e[0m"
-}
+source ./scripts/output.sh
 
 
 update_package_cache() {
     case "${ID}" in
         debian|ubuntu)
+            info_msg "Updating package list"
             apt update --yes
         ;;
     esac
@@ -46,6 +20,7 @@ update_package_cache() {
 clean_package_cache() {
     case "${ID}" in
         debian|ubuntu)
+            info_msg "Cleaning the package cache"
             apt clean
         ;;
     esac
@@ -55,6 +30,7 @@ clean_package_cache() {
 install_packages() {
     case "${ID}" in
         debian|ubuntu)
+            info_msg "Installing packages: $*"
             apt install --yes --no-install-recommends "$@"
         ;;
     esac
@@ -66,6 +42,7 @@ install_packages() {
 #   - The URL of the binary file
 #   - The name to be given to the downloaded binary file.
 download_binary() {
+    info_msg "Downloading binary from $1"
     curl -fsSL "$1" > "$2"
 }
 
@@ -79,9 +56,9 @@ verify_binary_checksum() {
     ACTUAL_CHECKSUM=`openssl sha256 -r "$2" | cut -d' ' -f1`
 
     if [ ${EXPECTED_CHECKSUM} = ${ACTUAL_CHECKSUM} ]; then
-        msg yellow "[I] Binary checksum successfully verified"
+        info_msg "Binary checksum successfully verified"
     else
-        msg red "[E] Binary checksum mismatch. Expected: ${EXPECTED_CHECKSUM}. Actual: ${ACTUAL_CHECKSUM}."
+        error_msg "Binary checksum mismatch. Expected: ${EXPECTED_CHECKSUM}. Actual: ${ACTUAL_CHECKSUM}."
         exit 1
     fi
 }
@@ -102,15 +79,16 @@ source /etc/os-release
 
 case "${ID}" in
     debian|ubuntu)
+        info_msg "Supported operating system: ${ID}"
     ;;
     *)
-        msg red "$[E] {ID}: Unsupported operating system"
+        error_msg "${ID}: Unsupported operating system"
         exit 1
     ;;
 esac
     
 if [ "$(id --user)" -ne 0 ]; then
-  msg red "[E] Script must be run as root. Actual UID: $(id --user)"
+  error_msg "Script must be run as root. Actual UID: $(id --user)"
   exit 1
 fi
 
@@ -127,4 +105,4 @@ download_binary ${BINARY_URL} /tmp/${BINARY_FILENAME}
 verify_binary_checksum ${CHECKSUM_URL} /tmp/${BINARY_FILENAME}
 install_binary /tmp/${BINARY_FILENAME} /usr/local/bin
 
-msg green "Fortran Package Manager successfully installed"
+success_msg "Fortran Package Manager successfully installed"
