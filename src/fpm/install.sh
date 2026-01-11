@@ -100,4 +100,4 @@ download_binary ${BINARY_URL} /tmp/${BINARY_FILENAME}
 verify_binary_checksum ${CHECKSUM_URL} /tmp/${BINARY_FILENAME}
 install_binary /tmp/${BINARY_FILENAME} /usr/local/bin
 
-msg green "Fortran Package Manager successfully instaled"
+msg green "Fortran Package Manager successfully installed"
