@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# ...
+# Functions used to print out messages.
 
 
 # Outputs a message using the given color.
@@ -32,7 +32,7 @@ color_msg() {
 }
 
 
-# ...
+# Prints a success message.
 # Argumnents:
 #   - The message to be printed out
 success_msg() {
@@ -40,7 +40,7 @@ success_msg() {
 }
 
 
-# ...
+# Prints an information message.
 # Argumnents:
 #   - The message to be printed out
 info_msg() {
@@ -48,7 +48,7 @@ info_msg() {
 }
 
 
-# ...
+# Prints a warning message.
 # Argumnents:
 #   - The message to be printed out
 warn_msg() {
@@ -56,7 +56,7 @@ warn_msg() {
 }
 
 
-# ...
+# Prints an error message.
 # Argumnents:
 #   - The message to be printed out
 error_msg() {
