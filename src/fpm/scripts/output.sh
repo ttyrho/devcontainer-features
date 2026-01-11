@@ -6,7 +6,7 @@
 # Arguments:
 #   - The name of the color to use on message ouput
 #   - The message to be printed out
-msg() {
+color_msg() {
     case "$1" in
         red)
             COLOR="\e[1;31m"
@@ -29,4 +29,36 @@ msg() {
     esac
 
     echo -e "${COLOR}$2\e[0m"
+}
+
+
+# ...
+# Argumnents:
+#   - The message to be printed out
+success_msg() {
+    color_msg green "$1"
+}
+
+
+# ...
+# Argumnents:
+#   - The message to be printed out
+info_msg() {
+    color_msg cyan "[I] $1"
+}
+
+
+# ...
+# Argumnents:
+#   - The message to be printed out
+warn_msg() {
+    color_msg yellow "[W] $1"
+}
+
+
+# ...
+# Argumnents:
+#   - The message to be printed out
+error_msg() {
+    color_msg red "[E] $1"
 }
