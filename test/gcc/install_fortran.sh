@@ -7,10 +7,7 @@ source dev-container-features-test-lib
 check "C/C++ compiler (gcc) is available" gcc --version
 check "C/C++ compiler (cc) is available" cc --version
 
-# Check the C++ frontend is not available
-check "C++ frontend is not available" test ! `which g++`
-
-# Check the Fortran compiler is not available
-check "Fortran compiler (gfortran) is not available" test ! `which gfortran`
+# Chec the GNU Fortran compiler is available
+check "Fortran compiler (gfortran) availability" gfortran --version
 
 reportResults
