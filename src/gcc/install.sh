@@ -53,8 +53,15 @@ if [ "$(id --user)" -ne 0 ]; then
   exit 1
 fi
 
+package_list=(gcc)
+
+if [ ${INSTALLFORTRAN} = "true" ]; then
+    info_msg "Installing the GNU Fortran compiler (gfortran)"
+    package_list=("${package_list[@]}" gfortran)
+fi
+
 update_package_cache
-install_packages gcc
+install_packages "${package_list[@]}"
 clean_package_cache
 
 success_msg "GNU Compiler Collection installed"

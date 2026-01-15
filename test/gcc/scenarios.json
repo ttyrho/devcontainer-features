@@ -1,0 +1,10 @@
+{
+    "install_fortran": {
+        "image": "debian:trixie",
+        "features": {
+            "gcc": {
+                "installFortran": true
+            }
+        }
+    }
+}
