@@ -5,6 +5,11 @@
     "description": "Installs the GNU Compiler Collection",
     "documentationURL": "https://github.com/ttyrho/devcontainer-features/tree/main/src/gcc",
     "options": {
+        "installCPlusPlus": {
+            "type": "boolean",
+            "description": "Whether or not to install the GNU C++ frontend",
+            "default": false
+        },
         "installFortran": {
             "type": "boolean",
             "description": "Whether or not to install the GNU Fortran frontend",

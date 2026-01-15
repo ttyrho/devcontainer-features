@@ -55,6 +55,11 @@ fi
 
 package_list=(gcc)
 
+if [ ${INSTALLCPLUSPLUS} = "true" ]; then
+    info_msg "Installing the GNU C++ frontend (g++)"
+    package_list=("${package_list[@]}" g++)
+fi
+
 if [ ${INSTALLFORTRAN} = "true" ]; then
     info_msg "Installing the GNU Fortran compiler (gfortran)"
     package_list=("${package_list[@]}" gfortran)

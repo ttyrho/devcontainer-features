@@ -7,11 +7,16 @@ Installs the GNU Compiler Collection
 
 ```json
 "features": {
-    "ghcr.io/ttyrho/devcontainer-features/gcc:1": {}
+    "ghcr.io/ttyrho/devcontainers/gcc:1": {}
 }
 ```
 
+## Options
 
+| Options Id | Description | Type | Default Value |
+|-----|-----|-----|-----|
+| installCPlusPlus | Whether or not to install the GNU C++ frontend | boolean | false |
+| installFortran | Whether or not to install the GNU Fortran frontend | boolean | false |
 
 
 

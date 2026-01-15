@@ -1,4 +1,12 @@
 {
+    "install_cplusplus": {
+        "image": "debian:trixie",
+        "features": {
+            "gcc": {
+                "installCPlusPlus": true
+            }
+        }
+    },
     "install_fortran": {
         "image": "debian:trixie",
         "features": {
