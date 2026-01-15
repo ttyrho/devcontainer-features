@@ -1,0 +1,7 @@
+{
+    "id": "gcc",
+    "name": "GNU Compiler Collection",
+    "version": "1.0.0",
+    "description": "Installs the GNU Compiler Collection",
+    "documentationURL": "https://github.com/ttyrho/devcontainer-features/tree/main/src/gcc"
+}
