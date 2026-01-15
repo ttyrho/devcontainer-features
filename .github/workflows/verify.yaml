@@ -11,11 +11,13 @@ jobs:
     strategy:
       matrix:
         features:
-          - "fpm"
-          - "gfortran"
+          - fpm
+          - gcc
+          - gfortran
         baseImage:
-          - "mcr.microsoft.com/devcontainers/base:ubuntu"
-          - "mcr.microsoft.com/devcontainers/base:trixie"
+          - mcr.microsoft.com/devcontainers/base:ubuntu
+          - mcr.microsoft.com/devcontainers/base:trixie
+          - debian:trixie
     steps:
       - uses: actions/checkout@v6
 
